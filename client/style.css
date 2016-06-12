@@ -21,10 +21,17 @@
 .gobbler {
   display: inline-block;
   opacity: .75;
-  background-color: #392;
   box-shadow: 2px 2px 0px #888888;
   transition: all 0.2s;
   cursor: pointer;
+}
+
+.green {
+  background-color: #392;
+}
+
+.red {
+  background-color: #923;
 }
 
 .small {

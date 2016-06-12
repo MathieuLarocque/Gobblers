@@ -10,7 +10,7 @@ class Gobbler extends React.Component {
   }
   render () {
     const { isDragging, connectDragSource } = this.props;
-    const classesnames = "gobbler " + this.props.size;
+    const classesnames = "gobbler " + this.props.size + " " + this.props.color;
     return connectDragSource(
       <div className={ classesnames }></div>
     )

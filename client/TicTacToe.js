@@ -125,9 +125,12 @@ class TicTacToe extends React.Component {
           { grid }
           { announcement }
         </div>
-        <Gobbler size="small"></Gobbler>
-        <Gobbler size="medium"></Gobbler>
-        <Gobbler size="big"></Gobbler>
+        <Gobbler color="green" size="small"></Gobbler>
+        <Gobbler color="green" size="medium"></Gobbler>
+        <Gobbler color="green" size="big"></Gobbler>
+        <Gobbler color="red" size="small"></Gobbler>
+        <Gobbler color="red" size="medium"></Gobbler>
+        <Gobbler color="red" size="big"></Gobbler>
       </div>
     );
   }
