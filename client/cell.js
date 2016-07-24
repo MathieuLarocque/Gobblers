@@ -1,8 +1,8 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 import Board from './board.js';
-import ai from './ai.js';
 import HTML5Backend from 'react-dnd-html5-backend';
-import Gobbler from './gobbler.js'
+import Gobbler from './gobbler.js';
 import { DragDropContext } from 'react-dnd';
 import { DropTarget } from 'react-dnd';
 
@@ -13,80 +13,62 @@ class Cell extends React.Component {
   constructor(props) {
     super(props);
     this.board = this.props.board;
-    this.state = {player: 1, freezeBoard: false, winner: false};
-  }
-
-  nextPlayer() {
-    return this.state.player === 1 ? 2 : 1;
-  }
-
-  // Place a move on the board and check for a winner.
-  move(x, y, player, callback) {
-    this.board.move(x, y, player);
-    const winner = this.board.checkWin();
-
-    if (winner) {
-      this.setState({winner, freezeBoard: true});
-    } else {
-      callback();
-    }
-  }
-
-  // Handle a player's move, and switch to the next player.
-  playerMove(event) {
-    const [ x, y ] = event.target.dataset.cell.split('_');
-    const cellEmpty = this.board.getCell(x, y) === 0;
-
-    if (cellEmpty) {
-      this.move(x, y, this.state.player, () => {
-        if (this.props.singlePlayer) {
-          this.setState({player: this.nextPlayer(), freezeBoard: true}, this.aiMove);
-        } else {
-          this.setState({player: this.nextPlayer()});
-        }
-      });
-    }
-  }
-
-  // Make an AI move, with a small delay for a more natural response time.
-  aiMove() {
-    const [ x, y ] = ai.move(this.board, this.state.player);
-
-    setTimeout(() => {
-      this.move(x, y, this.state.player, () => {
-        this.setState({player: this.nextPlayer(), freezeBoard: false});
-      });
-    }, 200);
-  }
-
-  // Determine which player will be the AI in single player mode,
-  // and make the first move if appropriate.
-  aiInit() {
-    if (this.props.singlePlayer) {
-      const aiPlayer = Math.floor(Math.random() * 2) + 1;
-      if (aiPlayer === 1) {
-        this.aiMove();
-      }
-    }
-  }
-
-  reset() {
-    this.board = new Board(this.props.width);
-    this.setState({player: 1, freezeBoard: false, winner: false});
-    this.aiInit();
+    this.state = {gobblers: []};
   }
 
   componentDidMount() {
-    this.aiInit();
+  
+  }
+
+  addGobbler(gobbler) {
+    let gobblers = this.state.gobblers;
+    if (gobblers.length > 0) {
+      var lastGobbler = gobblers[gobblers.length - 1];
+      if (lastGobbler && gobbler.sizeNum > lastGobbler.sizeNum) {
+        gobblers.push(gobbler);
+        this.setState({gobblers});
+        return {moved: true};
+      }
+    } else {
+      gobblers.push(gobbler);
+      this.setState({gobblers});
+      return {moved: true};
+    }
+  }
+
+  removeGobbler(end) {
+    let gobblers = this.state.gobblers;
+    if (gobblers.length > 1) {
+      gobblers.pop();
+      this.setState({gobblers});
+    } else if (end) {
+      gobblers = [];
+      this.setState({gobblers});
+      // gobblers[0].isHidden = true;
+      // this.setState(gobblers);
+    }
   }
 
   render() {
     // const cell = this.props.cell;
-    console.log(this.props.cell);
     const [ size, player ] = this.props.cell.split("_");
-    const classString = player > 0 ? player === 1 ? 'cell-p1' : 'cell-p2' : 'cell';
-    
-    return this.props.connectDropTarget( <div className={ classString }  data-cell={ this.props.coords }></div> )
+    let gobblers = this.state.gobblers;
+    let lastGobbler = gobblers[gobblers.length - 1];
+    let lastGobblerComp;
+    let ifHidden = '';
+    if (lastGobbler && lastGobbler.isHidden) {
+      ifHidden = 'hidden';
+    } else {
+      ifHidden = 'gobblercontainer';      
+    }
+    if (lastGobbler) {
+      lastGobblerComp = (<div className="gobblercontainer" ><Gobbler color={lastGobbler.color} size={lastGobbler.size} sizeNum={lastGobbler.sizeNum} remove={this.removeGobbler.bind(this)} add={this.addGobbler.bind(this)}>
+                            </Gobbler></div> )
+    }
+    return this.props.connectDropTarget( <div className="cell"  data-cell={ this.props.coords }>
+        {lastGobblerComp}
+      </div> 
+    )
   }
 }
 
@@ -101,10 +83,21 @@ Cell.defaultProps = { freezeBoard: false };
 // export default TicTacToe;
 const spec = {
   drop(props, monitor, component) {
-    props.dropFunc(props.coords, monitor.getItem().size);
-    return {
-      color: "blue"
-    };
+    var gobbler = monitor.getItem();
+    props.dropFunc(props.coords, gobbler.size);
+    var gobblers = component.state.gobblers;
+    if (gobblers.length > 0) {
+      var lastGobbler = gobblers[gobblers.length - 1];
+      if (lastGobbler && gobbler.sizeNum > lastGobbler.sizeNum) {
+        gobblers.push(gobbler);
+        component.setState({gobblers});
+        return {moved: true};
+      }
+    } else {
+      gobblers.push(gobbler);
+      component.setState({gobblers});
+      return {moved: true};
+    }
   }
 };
 function collect(connect, monitor) {
@@ -116,4 +109,5 @@ function collect(connect, monitor) {
     itemType: monitor.getItemType()
   };
 }
+
 export default DropTarget("gobbler", spec, collect)(Cell);

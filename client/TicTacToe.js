@@ -1,14 +1,14 @@
+'use strict';
 import React from 'react';
 import Board from './board.js';
-import ai from './ai.js';
 import HTML5Backend from 'react-dnd-html5-backend';
 import Gobbler from './gobbler.js'
 import { DragDropContext } from 'react-dnd';
 import Cell from './cell.js';
+import TrackerReact from 'meteor/ultimatejs:tracker-react';
+import Boards from '../common.js';
 
-'use strict';
-
-class TicTacToe extends React.Component {
+class TicTacToe extends TrackerReact(React.Component) {
 
   constructor(props) {
     super(props);
@@ -32,16 +32,19 @@ class TicTacToe extends React.Component {
     }
   }
 
+  getBoard () {
+    return Boards.findOne(this.state.boardId);
+  }
+
   // Handle a player's move, and switch to the next player.
   playerMove(x,y,size) {
     // const [ x, y ] = event.target.dataset.cell.split('_');
     const cellEmpty = this.board.getCell(x, y) === "none";
     if (cellEmpty) {
       var gobbler = size + "_" + this.state.player;
-      console.log(gobbler);
       this.move(x, y, gobbler, () => {
         if (this.props.singlePlayer) {
-          this.setState({player: this.nextPlayer(), freezeBoard: true}, this.aiMove);
+          this.setState({player: this.nextPlayer(), freezeBoard: true});
         } else {
           this.setState({player: this.nextPlayer()});
         }
@@ -49,48 +52,24 @@ class TicTacToe extends React.Component {
     }
   }
 
-  // Make an AI move, with a small delay for a more natural response time.
-  aiMove() {
-    const [ x, y ] = ai.move(this.board, this.state.player);
-
-    setTimeout(() => {
-      this.move(x, y, this.state.player, () => {
-        this.setState({player: this.nextPlayer(), freezeBoard: false});
-      });
-    }, 200);
-  }
-
-  // Determine which player will be the AI in single player mode,
-  // and make the first move if appropriate.
-  aiInit() {
-    if (this.props.singlePlayer) {
-      const aiPlayer = Math.floor(Math.random() * 2) + 1;
-      if (aiPlayer === 1) {
-        this.aiMove();
-      }
-    }
-  }
-
   reset() {
     this.board = new Board(this.props.width);
     this.setState({player: "green", freezeBoard: false, winner: false});
-    this.aiInit();
   }
 
   dropFunc (coords, size) {
     const [ x, y ] = coords.split('_');
-    console.log(this.state.player);
     this.playerMove(x, y, size);
     // console.log(this.props);
     // console.log(size);
   }
 
   componentDidMount() {
-    this.aiInit();
   }
 
   render() {
     const { board } = this.board;
+    console.log(board);
     let announcement;
 
     if (this.state.winner) {
@@ -105,12 +84,11 @@ class TicTacToe extends React.Component {
 
     const grid = board.map((row, rowInd) => {
       const cells = row.map((cell, cellInd) => {
-        console.log(cell);
         let size;
         let clickHandler;
         if (!this.state.freezeBoard) { clickHandler = this.playerMove.bind(this); }
         const coords = `${rowInd}_${cellInd}`;
-        return ( <span onClick={ clickHandler } key={ coords }>
+        return ( <span onClick={ clickHandler } key={ coords } className="cellContainer">
           <Cell cell={ cell } size={ size } coords={ coords } board={ this.board } dropFunc={ this.dropFunc.bind(this) }></Cell>
           </span> 
         )
@@ -125,18 +103,22 @@ class TicTacToe extends React.Component {
           { grid }
           { announcement }
         </div>
-        <Gobbler color="green" size="small"></Gobbler>
-        <Gobbler color="green" size="medium"></Gobbler>
-        <Gobbler color="green" size="big"></Gobbler>
-        <Gobbler color="red" size="small"></Gobbler>
-        <Gobbler color="red" size="medium"></Gobbler>
-        <Gobbler color="red" size="big"></Gobbler>
+        <div className="unplayedGobblers">
+        <Gobbler color="green" size="small" sizeNum={1} ></Gobbler>
+        <Gobbler color="green" size="medium" sizeNum={2} ></Gobbler>
+        <Gobbler color="green" size="big" sizeNum={3} ></Gobbler>
+        <Gobbler color="red" size="small" sizeNum={1} ></Gobbler>
+        <Gobbler color="red" size="medium" sizeNum={2} ></Gobbler>
+        <Gobbler color="red" size="big" sizeNum={3} ></Gobbler>
+        </div>
       </div>
     );
   }
 }
 
-TicTacToe.propTypes = { width: React.PropTypes.number };
+TicTacToe.propTypes = { 
+  width: React.PropTypes.number 
+};
 TicTacToe.defaultProps = { width: 3 };
 
 // export default TicTacToe;

@@ -6,8 +6,13 @@
   margin-bottom: 10px;
 }
 
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
 .cell {
-  display: inline-block;
+  display: flex;
   width: 150px;
   height: 150px;
   border-radius: 75px;
@@ -15,15 +20,33 @@
   background-color: #aaa;
   box-shadow: 2px 2px 0px #888888;
   transition: all 0.2s;
-  cursor: pointer;
 }
 
 .gobbler {
-  display: inline-block;
   opacity: .75;
   box-shadow: 2px 2px 0px #888888;
   transition: all 0.2s;
   cursor: pointer;
+}
+
+.gobblercontainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  border: none;
+}
+
+.hidden {
+  display: none;
+}
+
+.unplayedGobblers {
+  display: flex;
+  -webkit-flex-direction: row;
+   flex-direction: row;
+
 }
 
 .green {
@@ -52,33 +75,6 @@
   border-radius: 75px;
 }
 
-.cell-p1 {
-  display: inline-block;
-  width: 150px;
-  height: 150px;
-  border-radius: 75px;
-  opacity: .75;
-  background-color: #aaa;
-  box-shadow: 2px 2px 0px #888888;
-  transition: all 0.2s;
-  cursor: pointer;
-  background-color: white;
-  cursor: default;
-}
-
-.cell-p2 {
-  display: inline-block;
-  width: 150px;
-  height: 150px;
-  border-radius: 75px;
-  opacity: .75;
-  background-color: #aaa;
-  box-shadow: 2px 2px 0px #888888;
-  transition: all 0.2s;
-  cursor: pointer;
-  background-color: black;
-  cursor: default;
-}
 
 .announcement {
   display: flex;
@@ -98,7 +94,7 @@
   font-size: 2em;
   color: white;
 }
-button {
+.button {
     height: 50px;
     width: 100px;
 
@@ -110,3 +106,10 @@ button {
     background-color: white;
     color: purple;
   }
+
+button {
+  margin: 3px 5px;
+  font-size: 1.1em;
+  padding: 5px 8px;
+  cursor: pointer;
+}

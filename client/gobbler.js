@@ -18,10 +18,29 @@ class Gobbler extends React.Component {
 }
 
 const spec = {
-  beginDrag(props) {
+  beginDrag(props, monitor, component) {
+    if (props.remove) {
+      props.remove();
+    }
     return {
-      size: props.size
+      size: props.size,
+      sizeNum: props.sizeNum,
+      color: props.color
     };
+  },
+  endDrag(props, monitor, component) {
+    var res = monitor.getDropResult();
+    var gobbler = monitor.getItem();
+    if (res && res.moved) {
+      if (props.remove) {
+        props.remove(true);
+      }
+      // if (gobbler == )
+    } else {
+      props.add(gobbler);
+    }
+    console.log();
+    console.log(monitor.getItem());
   }
 };
 
