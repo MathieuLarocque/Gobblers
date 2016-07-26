@@ -1,3 +1,4 @@
+'use strict';
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import Board from './board.js';
@@ -5,14 +6,12 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import Gobbler from './gobbler.js';
 import { DragDropContext } from 'react-dnd';
 import { DropTarget } from 'react-dnd';
-
-'use strict';
+import Boards from '../common.js';
 
 class Cell extends React.Component {
 
   constructor(props) {
     super(props);
-    this.board = this.props.board;
     this.state = {gobblers: []};
   }
 
@@ -21,46 +20,58 @@ class Cell extends React.Component {
   }
 
   addGobbler(gobbler) {
-    let gobblers = this.state.gobblers;
+    let board = this.props.board;
+    let [row, col] = this.props.coords.split('_');
+    let gobblers = board[row][col];
     if (gobblers.length > 0) {
       var lastGobbler = gobblers[gobblers.length - 1];
       if (lastGobbler && gobbler.sizeNum > lastGobbler.sizeNum) {
         gobblers.push(gobbler);
-        this.setState({gobblers});
+        board[row][col] = gobblers;
+        Boards.update(this.props.boardId, {$set: {board: board}});
+        // this.setState({gobblers});
         return {moved: true};
       }
     } else {
       gobblers.push(gobbler);
-      this.setState({gobblers});
+      board[row][col] = gobblers;
+      Boards.update(this.props.boardId, {$set: {board: board}});
+      // this.setState({gobblers});
       return {moved: true};
     }
   }
 
   removeGobbler(end) {
-    let gobblers = this.state.gobblers;
+    let {board} = Boards.findOne(this.props.boardId);
+    let [row, col] = this.props.coords.split('_');
+    let gobblers = board[row][col];
+    // let gobblers = this.state.gobblers;
     if (gobblers.length > 1) {
       gobblers.pop();
-      this.setState({gobblers});
+      board[row][col] = gobblers;
+      Boards.update(this.props.boardId, {$set: {board: board}});      
+      // this.setState({gobblers});
     } else if (end) {
       gobblers = [];
-      this.setState({gobblers});
+      board[row][col] = gobblers;
+      Boards.update(this.props.boardId, {$set: {board: board}});      
+      // this.setState({gobblers});
       // gobblers[0].isHidden = true;
       // this.setState(gobblers);
     }
   }
 
   render() {
-    // const cell = this.props.cell;
-    const [ size, player ] = this.props.cell.split("_");
-    let gobblers = this.state.gobblers;
-    let lastGobbler = gobblers[gobblers.length - 1];
+    
+    // let gobblers = this.state.gobblers;
+    let lastGobbler;
+    let gobblers = this.props.gobblers;
+    if (gobblers.length > 0) {
+      lastGobbler = gobblers[gobblers.length - 1];
+    } 
+    console.log(gobblers);
+    // let lastGobbler = gobblers[gobblers.length - 1];
     let lastGobblerComp;
-    let ifHidden = '';
-    if (lastGobbler && lastGobbler.isHidden) {
-      ifHidden = 'hidden';
-    } else {
-      ifHidden = 'gobblercontainer';      
-    }
     if (lastGobbler) {
       lastGobblerComp = (<div className="gobblercontainer" ><Gobbler color={lastGobbler.color} size={lastGobbler.size} sizeNum={lastGobbler.sizeNum} remove={this.removeGobbler.bind(this)} add={this.addGobbler.bind(this)}>
                             </Gobbler></div> )
@@ -75,7 +86,7 @@ class Cell extends React.Component {
 Cell.propTypes = { 
     coords: React.PropTypes.string,
     cell: React.PropTypes.string,
-    board: React.PropTypes.object,
+    boardId: React.PropTypes.string,
     freezeBoard: React.PropTypes.bool
 };
 Cell.defaultProps = { freezeBoard: false };
@@ -83,6 +94,14 @@ Cell.defaultProps = { freezeBoard: false };
 // export default TicTacToe;
 const spec = {
   drop(props, monitor, component) {
+    let board = Boards.findOne(props.boardId);
+    let [row, col] = props.coords.split('_');
+    if (board) {
+      let gobblers2 = board.board[row][col];
+      console.log(gobblers2);
+    }
+    // let gobblers2 = board[row][col];
+    console.log(props.boardId, board, row, col);
     var gobbler = monitor.getItem();
     props.dropFunc(props.coords, gobbler.size);
     var gobblers = component.state.gobblers;
@@ -90,7 +109,9 @@ const spec = {
       var lastGobbler = gobblers[gobblers.length - 1];
       if (lastGobbler && gobbler.sizeNum > lastGobbler.sizeNum) {
         gobblers.push(gobbler);
-        component.setState({gobblers});
+        board.board[row][col] = gobblers;
+        console.log(Boards.update(props.boardId, {$set: {board: board.board}}));
+        // component.setState({gobblers});
         return {moved: true};
       }
     } else {

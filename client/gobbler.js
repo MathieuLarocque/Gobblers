@@ -36,11 +36,10 @@ const spec = {
         props.remove(true);
       }
       // if (gobbler == )
-    } else {
+    } else if (props.add) {
+      console.log("yo");
       props.add(gobbler);
     }
-    console.log();
-    console.log(monitor.getItem());
   }
 };
 

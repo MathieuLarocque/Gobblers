@@ -33,7 +33,7 @@ class TicTacToe extends TrackerReact(React.Component) {
   }
 
   getBoard () {
-    return Boards.findOne(this.state.boardId);
+    return Boards.findOne(this.props.boardId);
   }
 
   // Handle a player's move, and switch to the next player.
@@ -68,8 +68,8 @@ class TicTacToe extends TrackerReact(React.Component) {
   }
 
   render() {
-    const { board } = this.board;
-    console.log(board);
+    // const { board } = this.board;
+    var { board }  = this.getBoard();
     let announcement;
 
     if (this.state.winner) {
@@ -81,15 +81,15 @@ class TicTacToe extends TrackerReact(React.Component) {
         </div>
       );
     }
-
+    console.log("board:", board);
     const grid = board.map((row, rowInd) => {
-      const cells = row.map((cell, cellInd) => {
+      const cells = row.map((gobblers, cellInd) => {
         let size;
         let clickHandler;
         if (!this.state.freezeBoard) { clickHandler = this.playerMove.bind(this); }
         const coords = `${rowInd}_${cellInd}`;
         return ( <span onClick={ clickHandler } key={ coords } className="cellContainer">
-          <Cell cell={ cell } size={ size } coords={ coords } board={ this.board } dropFunc={ this.dropFunc.bind(this) }></Cell>
+          <Cell gobblers={ gobblers } size={ size } coords={ coords } board={ board } boardId={ this.props.boardId } dropFunc={ this.dropFunc.bind(this) }></Cell>
           </span> 
         )
       });
