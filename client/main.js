@@ -1,34 +1,28 @@
 'use strict';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { connect } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import TicTacToe from './TicTacToe.js';
+import { Provider, connect } from 'react-redux';
+import Board from './c.board.js';
 import "./main.html";
-import Landing from './landing.js';
-import Boards from '../common.js'
-
-function updateBoard (state = {}, action) {
-  switch (action.type) {
-    case 'UPDATE_BOARD':
-      return state.concat([ action.newGobbler ])
-    default:
-      return state
-  }
-}
+import store from './store.js';
+import data from './data.js';
 
 Meteor.startup(function () {
-  var emptyBoard = [[ [], [], [] ], 
-                    [ [], [], [] ], 
-                    [ [], [], [] ]];
-  var store = createStore(
-    rootReducer,
-    applyMiddleware(thunk)
+  var id = data.create();
+  Tracker.autorun(() => {
+    var board = data.fetchBoard();
+    store.dispatch({
+      type: 'UPDATE_BOARD',
+      data: data,
+      board: board
+    });
+  });
+  ReactDOM.render(
+    <Provider store={store}>
+      <Board />
+    </Provider>,
+    document.getElementById('app')
   );
-  var boardId = Boards.insert({board: emptyBoard});
-  ReactDOM.render(<TicTacToe width={ 3 } boardId={ boardId } singlePlayer />, document.getElementById('app'));
-  
 });
 
 
