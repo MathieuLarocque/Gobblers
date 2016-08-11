@@ -2,6 +2,7 @@
 import React from 'react';
 import connectRedux from './connect.redux.js';
 import connectDnd from './connect.dnd.gobbler.js';
+import modelConnect from './connect.model.js';
 
 class Gobbler extends React.Component {
   constructor(props) {
@@ -16,4 +17,4 @@ class Gobbler extends React.Component {
   }
 }
 
-export default connectRedux(connectDnd(Gobbler));
+export default modelConnect(connectDnd(Gobbler));

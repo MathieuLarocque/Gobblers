@@ -1,3 +1,9 @@
+#app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
 .grid {
   position: relative;
   display: flex;
@@ -81,6 +87,19 @@
   border-radius: 75px;
 }
 
+.username {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 5px 50px;
+  padding: 5px 15px;
+  border: 1px solid #555;
+}
+
+.challengeButton {
+
+  right: 5px;
+}
 
 .announcement {
   display: flex;
@@ -118,4 +137,10 @@ button {
   font-size: 1.1em;
   padding: 5px 8px;
   cursor: pointer;
+}
+
+.landing {
+    margin: 50px;
+    margin-top: 80px;
+    font-size: 1.3em;
 }

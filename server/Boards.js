@@ -3,7 +3,10 @@ var Boards = new Mongo.Collection("boards");
 
 Meteor.publish('allBoards', function () {
     return Boards.find();
-})
+});
+Meteor.publish('leaderboard', function () {
+    return Meteor.users.find();
+});
 
 Boards.allow({
   insert: function (userId, doc) {
@@ -24,7 +27,7 @@ Boards.allow({
     } else {
       return false;
     }
-    return allow;
+    return (userId && doc.player1 === userId);
     // the user must be logged in, and the document must be owned by the user
     // return true;
   }
