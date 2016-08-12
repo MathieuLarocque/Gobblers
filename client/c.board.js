@@ -6,6 +6,7 @@ import Gobbler from './c.gobbler.js'
 import Cell from './c.cell.js';
 import main from './main.js';
 import connectRedux from './connect.redux.js';
+import modelConnect from './connect.model.js';
 
 class Board extends React.Component {
 
@@ -56,4 +57,4 @@ class Board extends React.Component {
 }
 
 // export default TicTacToe;
-export default connectRedux(DragDropContext(HTML5Backend)(Board));
+export default modelConnect(DragDropContext(HTML5Backend)(Board));

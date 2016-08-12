@@ -3,6 +3,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import Gobbler from './c.gobbler.js';
 import connectRedux from './connect.redux.js';
 import connectDnd from './connect.dnd.cell.js';
+import modelConnect from './connect.model.js';
 
 'use strict';
 
@@ -43,4 +44,4 @@ Cell.propTypes = {
 // Cell.defaultProps = { freezeBoard: false };
 
 
-export default connectRedux(connectDnd(Cell));
+export default modelConnect(connectDnd(Cell));

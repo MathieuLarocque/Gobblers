@@ -5,6 +5,7 @@ import { Meteor } from 'meteor/meteor';
 import Tracker from 'tracker-component';
 import { browserHistory } from 'react-router';
 import Modal from 'react-modal';
+import modelConnect from './connect.model.js';
 
 const customStyles = {
   content : {
@@ -21,7 +22,7 @@ class Leaderboard extends React.Component {
 
   constructor(props) {
     super(props);
-    props.data.getUsers()
+    props.model.users.Read()
   }
 
   componentWillMount() {
@@ -38,7 +39,7 @@ class Leaderboard extends React.Component {
 
   challenge(user) {
       function f () {
-          this.props.data.challenge(user);
+          this.props.model.challenge.Create(user);
       }
       return f.bind(this);
   }
@@ -50,7 +51,7 @@ class Leaderboard extends React.Component {
   refuse() {
 
   }
-  
+
   render() {
     var { users, challenge, me } = this.props;
     const userList = users.map((user, i) => {
@@ -91,4 +92,4 @@ Leaderboard.propTypes = {
     users: React.PropTypes.array
 };
 Leaderboard.defaultProps = { users: [] };
-export default connectRedux(Leaderboard);
+export default modelConnect(Leaderboard);

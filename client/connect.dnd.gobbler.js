@@ -2,9 +2,9 @@ import { DragSource } from 'react-dnd';
 
 const events = {
   beginDrag (props) {
-    var { gobblers, coords, data } = props;
+    var { gobblers, coords, model } = props;
     if (gobblers && gobblers.length > 0 && coords) {
-        data.update(coords, gobblers.slice(0, -1));
+        model.board.update(coords, gobblers.slice(0, -1));
     }
     return {
       size: props.size,
@@ -14,13 +14,13 @@ const events = {
     };
   },
   endDrag(props, monitor) {
-    var res = monitor.getDropResult();
-    var gobbler = monitor.getItem();
-    var { gobblers, coords, data } = props;
-    if (res && res.moved) {
-        console.log('successful move');
-    } else if (coords) {
-        data.update(coords, gobblers.concat(gobbler));
+    var res = monitor.getDropResult() || {};
+    if (!res.moved) {
+        var gobbler = monitor.getItem();
+        var { gobblers, coords, model } = props;
+        if (coords) {
+          model.board.update(coords, gobblers.concat(gobbler));
+        }
     }
   }
 };

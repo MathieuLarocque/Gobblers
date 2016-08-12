@@ -3,29 +3,34 @@ import store from './store.js';
 // var db = new Mongo.Collection("boards");
 import db from './db.js';
 
-// var Challenges = new Mongo.Collection("challenges");
-// Meteor.subscribe('allBoards');
-// Meteor.subscribe('leaderboard');
-// Meteor.subscribe('challenges');
+var Challenges = new Mongo.Collection("challenges");
+Meteor.subscribe('allBoards');
+Meteor.subscribe('leaderboard');
+Meteor.subscribe('challenges');
 var emptyBoard = [[ [], [], [] ], 
                   [ [], [], [] ], 
                   [ [], [], [] ]];
 var model = {
     board: {
+        id: '',
         Create: function () {
             this.id = db.insert({
                 board: emptyBoard, 
                 player1: Meteor.userId()
             });
+            this.dispatch(emptyBoard);
         },
         Read: function () {
             var game = db.findOne(this.id);
             if (game && game.board) {
-                this.board = game.board;
-                return this.board;
+                return game.board;
             } else {
                 return {};
             }
+        },
+        ReadAndDispatch: function () {
+            var board = this.Read();
+            this.dispatch(board);
         },
         Update: function (coords, gobblers) {
             Meteor.call('update', coords, gobblers, this.id, function () {

@@ -3,6 +3,7 @@ import React from 'react';
 import connectRedux from './connect.redux.js';
 import { Meteor } from 'meteor/meteor';
 import { browserHistory } from 'react-router';
+import modelConnect from './connect.model.js';
 
 class Login extends React.Component {
 
@@ -19,7 +20,7 @@ class Login extends React.Component {
                 name: this.refs.name.value
             }
         };
-        this.props.data.createUser(options)
+        this.props.model.users.Create(options)
     }
     render() {
         return (
@@ -47,4 +48,4 @@ Login.propTypes = {
     users: React.PropTypes.array
 };
 Login.defaultProps = { users: [] };
-export default connectRedux(Login);
+export default modelConnect(Login);

@@ -14,28 +14,29 @@ import modelConnect from './reduxModel.js';
 import model from './model.js';
 
 Meteor.startup(function () {
-  var id = data.create();
-  Tracker.autorun(() => {
-    var board = data.fetchBoard();
-    store.dispatch({
-      type: 'UPDATE_BOARD',
-      board: board
-    });
-  });
-  Tracker.autorun(() => {
-    var challenge = data.fetchChallenges();
-    store.dispatch({
-      type: 'CHALLENGE',
-      challenge: challenge
-    });
-  });
-  Tracker.autorun(() => {
-    var me = Meteor.userId();
-    store.dispatch({
-      type: 'UPDATE_ME',
-      me: me
-    });
-  });
+  var id = model.board.Create();
+  Tracker.autorun(model.board.ReadAndDispatch.bind(model.board));
+  // Tracker.autorun(() => {
+  //   var board = data.fetchBoard();
+  //   store.dispatch({
+  //     type: 'UPDATE_BOARD',
+  //     board: board
+  //   });
+  // });
+  // Tracker.autorun(() => {
+  //   var challenge = data.fetchChallenges();
+  //   store.dispatch({
+  //     type: 'CHALLENGE',
+  //     challenge: challenge
+  //   });
+  // });
+  // Tracker.autorun(() => {
+  //   var me = Meteor.userId();
+  //   store.dispatch({
+  //     type: 'UPDATE_ME',
+  //     me: me
+  //   });
+  // });
   ReactDOM.render(
     <Provider store={store}>
       <Router history={browserHistory}>
