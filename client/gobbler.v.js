@@ -1,10 +1,8 @@
 'use strict';
 import React from 'react';
-import connectRedux from './connect.redux.js';
-import connectDnd from './connect.dnd.gobbler.js';
-import modelConnect from './connect.model.js';
+import connectDnd from './gobbler.c.js';
 
-class Gobbler extends React.Component {
+export default class Gobbler extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -16,5 +14,3 @@ class Gobbler extends React.Component {
     )
   }
 }
-
-export default modelConnect(connectDnd(Gobbler));

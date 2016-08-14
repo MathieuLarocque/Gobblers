@@ -1,4 +1,6 @@
 import { DragSource } from 'react-dnd';
+import Gobbler from './gobbler.v.js';
+import { connectModel } from './reduxModel.js';
 
 const events = {
   beginDrag (props) {
@@ -32,4 +34,6 @@ function mapProps(connect, monitor) {
   };
 }
 
-export default DragSource("gobbler", events, mapProps);
+var dnd = DragSource("gobbler", events, mapProps);
+
+export default connectModel(dnd(Gobbler));

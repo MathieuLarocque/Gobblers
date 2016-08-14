@@ -1,13 +1,10 @@
+'use strict';
 import React from 'react';
 import HTML5Backend from 'react-dnd-html5-backend';
-import Gobbler from './c.gobbler.js';
-import connectRedux from './connect.redux.js';
-import connectDnd from './connect.dnd.cell.js';
-import modelConnect from './connect.model.js';
+import Gobbler from './gobbler.c.js';
+import connectDnd from './cell.c.js';
 
-'use strict';
-
-class Cell extends React.Component {
+export default class Cell extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -42,6 +39,3 @@ Cell.propTypes = {
     id: React.PropTypes.string
 };
 // Cell.defaultProps = { freezeBoard: false };
-
-
-export default modelConnect(connectDnd(Cell));

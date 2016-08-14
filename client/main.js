@@ -2,27 +2,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider, connect } from 'react-redux';
-import Board from './c.board.js';
+import Board from './board.c.js';
 import "./main.html";
-import store from './store.js';
-import data from './data.js';
 import { Router, Route, Link, browserHistory } from 'react-router';
-import Login from './c.login.js';
-import Leaderboard from './c.leaderboard.js';
+import Login from './login.v.js';
+import Leaderboard from './leaderboard.v.js';
 // import { Accounts, STATES } from 'meteor/std:accounts-ui';
-import modelConnect from './reduxModel.js';
+import { createStore, getModel, addModel } from './reduxModel.js';
 import model from './model.js';
+import boardModel from './board.m.js';
+import loginModel from './login.m.js';
+import leaderboardModel from './leaderboard.m.js';
+import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
+
+var store = createStore([loginModel, leaderboardModel, boardModel]);
+console.log(model);
+var model2 = getModel();
+console.log(model2);
+// var connectModel = connect(state => Object.assign({}, state, {model}));
+// Login = connectModel(Login);
+// Leaderboard = connectModel(Leaderboard);
+// Board = connectModel(Board);
 
 Meteor.startup(function () {
-  var id = model.board.Create();
-  Tracker.autorun(model.board.ReadAndDispatch.bind(model.board));
-  // Tracker.autorun(() => {
-  //   var board = data.fetchBoard();
-  //   store.dispatch({
-  //     type: 'UPDATE_BOARD',
-  //     board: board
-  //   });
-  // });
+  var id = model.board.create();
+  Tracker.autorun(model.board.readAndDispatch.bind(model.board));
   // Tracker.autorun(() => {
   //   var challenge = data.fetchChallenges();
   //   store.dispatch({
@@ -48,5 +52,4 @@ Meteor.startup(function () {
     document.getElementById('app')
   );
 });
-
 

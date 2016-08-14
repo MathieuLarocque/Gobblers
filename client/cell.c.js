@@ -1,10 +1,11 @@
 import { DropTarget } from 'react-dnd';
+import Cell from './cell.v.js';
+import { connectModel } from './reduxModel.js';
 
 const events = {
   drop(props, monitor, component) {
     var gobbler = monitor.getItem();
     var { gobblers, coords, model } = props;
-    console.log(model);
     if (gobblers.length > 0) {
         var lastGobbler = gobblers[gobblers.length - 1];
         if (lastGobbler && gobbler.sizeNum > lastGobbler.sizeNum) {
@@ -29,4 +30,6 @@ function mapProps(connect, monitor) {
   };
 }
 
-export default DropTarget("gobbler", events, mapProps);
+var dnd = DropTarget("gobbler", events, mapProps);
+
+export default connectModel(dnd(Cell));

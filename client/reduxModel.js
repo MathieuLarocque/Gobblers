@@ -1,15 +1,17 @@
 import { connect } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore as createReduxStore, combineReducers, applyMiddleware } from 'redux'
+import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
+
+var store = {};
+var connectedComponents = [];
+var model = {};
 
 function createReducer (model) {
     return function (state = {}, action) {
-        console.log('inside', action);
         var propNames = Object.keys(model);
         for (var i = 0; i < propNames.length; i++ ) {
-            console.log(propNames, action.type);
             if (action.type === propNames[i]) {
                 var newState = Object.assign({}, state, {[propNames[i]]: action.payload});
-                console.log('state', newState);
                 return newState;
             }
         }
@@ -17,7 +19,7 @@ function createReducer (model) {
     }
 }
 
-function Reduxify (store, model) {
+export function Reduxify (store, model) {
     var propNames = Object.keys(model);
     propNames.map(name => {
         model[name].dispatch = data => {
@@ -28,14 +30,31 @@ function Reduxify (store, model) {
             });
         }
     });
-    return model
+    return model;
 }
 
-function modelConnector (model) {
-    var store = createStore(createReducer(model)); 
-    Reduxify(store, model)
+export function getModel () {
+    console.log(model);
+    return model;
+}
+
+export function addModel (prop) {
+    console.log(model);
+    return Object.assign(model, prop);
+}
+
+export function createStore (props) {
+    // var store = createStore(combineReducers(Object.assign(createReducer(model),{routing: routerReducer})));
+    store = createReduxStore(createReducer(props));
+    Object.assign(model, props);
+    console.log(model);
+    Reduxify(store, model);
     return store;
     // return connect(state => Object.assign({}, state, {model}));
 }
 
-export default modelConnector;
+export var connectModel = connect(state => Object.assign({}, state, {model}));
+export function bindModel (component) {
+    // connectedComponents.push(component);
+    return m(component);
+}

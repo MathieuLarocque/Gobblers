@@ -1,11 +1,9 @@
 'use strict';
 import React from 'react';
-import connectRedux from './connect.redux.js';
 import { Meteor } from 'meteor/meteor';
 import { browserHistory } from 'react-router';
-import modelConnect from './connect.model.js';
 
-class Login extends React.Component {
+export default class Login extends React.Component {
 
     constructor(props) {
         super(props);
@@ -20,7 +18,7 @@ class Login extends React.Component {
                 name: this.refs.name.value
             }
         };
-        this.props.model.users.Create(options)
+        this.props.model.users.create(options)
     }
     render() {
         return (
@@ -44,8 +42,3 @@ class Login extends React.Component {
         );
     }
 }
-Login.propTypes = { 
-    users: React.PropTypes.array
-};
-Login.defaultProps = { users: [] };
-export default modelConnect(Login);

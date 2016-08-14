@@ -1,11 +1,8 @@
 'use strict';
 import React from 'react';
-import connectRedux from './connect.redux.js';
 import { Meteor } from 'meteor/meteor';
-import Tracker from 'tracker-component';
 import { browserHistory } from 'react-router';
 import Modal from 'react-modal';
-import modelConnect from './connect.model.js';
 
 const customStyles = {
   content : {
@@ -18,11 +15,11 @@ const customStyles = {
   }
 };
 
-class Leaderboard extends React.Component {
+export default class Leaderboard extends React.Component {
 
   constructor(props) {
     super(props);
-    props.model.users.Read()
+    props.model.users.read()
   }
 
   componentWillMount() {
@@ -39,7 +36,7 @@ class Leaderboard extends React.Component {
 
   challenge(user) {
       function f () {
-          this.props.model.challenge.Create(user);
+          this.props.model.challenge.create(user);
       }
       return f.bind(this);
   }
@@ -88,8 +85,3 @@ class Leaderboard extends React.Component {
     </div>);
   }
 }
-Leaderboard.propTypes = { 
-    users: React.PropTypes.array
-};
-Leaderboard.defaultProps = { users: [] };
-export default modelConnect(Leaderboard);

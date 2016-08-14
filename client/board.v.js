@@ -1,14 +1,9 @@
 'use strict';
 import React from 'react';
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DragDropContext } from 'react-dnd';
-import Gobbler from './c.gobbler.js'
-import Cell from './c.cell.js';
-import main from './main.js';
-import connectRedux from './connect.redux.js';
-import modelConnect from './connect.model.js';
+import Gobbler from './gobbler.c.js'
+import Cell from './cell.c.js';
 
-class Board extends React.Component {
+export default class Board extends React.Component {
 
   constructor(props) {
     super(props);
@@ -55,6 +50,3 @@ class Board extends React.Component {
     );
   }
 }
-
-// export default TicTacToe;
-export default modelConnect(DragDropContext(HTML5Backend)(Board));
