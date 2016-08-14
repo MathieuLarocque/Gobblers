@@ -43,12 +43,13 @@ export function addModel (prop) {
     return Object.assign(model, prop);
 }
 
-export function createStore (props) {
+export function createStore (newModel) {
     // var store = createStore(combineReducers(Object.assign(createReducer(model),{routing: routerReducer})));
-    store = createReduxStore(createReducer(props));
-    Object.assign(model, props);
-    console.log(model);
-    Reduxify(store, model);
+    store = createReduxStore(createReducer(newModel));
+    // Object.assign(model, props);
+    model = newModel;
+    console.log(newModel);
+    Reduxify(store, newModel);
     return store;
     // return connect(state => Object.assign({}, state, {model}));
 }

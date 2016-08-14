@@ -1,21 +1,21 @@
 'use strict';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider, connect } from 'react-redux';
-import Board from './board.c.js';
+import { Provider } from 'react-redux';
 import "./main.html";
 import { Router, Route, Link, browserHistory } from 'react-router';
-import Login from './login.v.js';
-import Leaderboard from './leaderboard.v.js';
-// import { Accounts, STATES } from 'meteor/std:accounts-ui';
 import { createStore, getModel, addModel } from './reduxModel.js';
-import model from './model.js';
-import boardModel from './board.m.js';
-import loginModel from './login.m.js';
-import leaderboardModel from './leaderboard.m.js';
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
+import Board from './board.c.js';
+import board from './board.m.js';
+import Login from './login.v.js';
+import login from './login.m.js';
+import Leaderboard from './leaderboard.v.js';
+import leaderboard from './leaderboard.m.js';
+// import { Accounts, STATES } from 'meteor/std:accounts-ui';
+// import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
-var store = createStore([loginModel, leaderboardModel, boardModel]);
+var model = { board, login, leaderboard };
+var store = createStore(model);
 console.log(model);
 var model2 = getModel();
 console.log(model2);
@@ -44,9 +44,9 @@ Meteor.startup(function () {
   ReactDOM.render(
     <Provider store={store}>
       <Router history={browserHistory}>
-        <Route path="/" component={ Login } />
+        <Route path="/" component={ Board } />
         <Route path="/leaderboard" component={Leaderboard} />
-        <Route path="/board" component={Board} />
+        <Route path="/board" component={ Board } />
       </Router>
     </Provider>,
     document.getElementById('app')
