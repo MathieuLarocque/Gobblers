@@ -39,8 +39,8 @@ Meteor.startup(function () {
     <Provider store={store}>
       <Router history={browserHistory}>
         <Route path="/" component={ Board } />
+        <Route path="/login" component={ Login } />
         <Route path="/leaderboard" component={Leaderboard} />
-        <Route path="/board" component={ Board } />
       </Router>
     </Provider>,
     document.getElementById('app')

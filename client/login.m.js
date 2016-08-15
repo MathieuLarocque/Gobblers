@@ -12,6 +12,9 @@ export default {
             };
         });
     },
+    getMe() {
+        return Meteor.user();
+    },
     read: function () {
         Meteor.call('getUsers', function (err, users) {
         });

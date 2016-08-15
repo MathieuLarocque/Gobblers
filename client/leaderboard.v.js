@@ -50,7 +50,7 @@ export default class Leaderboard extends React.Component {
   }
 
   render() {
-    var { users, challenge, me } = this.props;
+    var { model } = this.props;
     const userList = users.map((user, i) => {
         return ( <div key={ i } className="username">
                     <div>{user._id}</div>

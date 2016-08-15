@@ -12,6 +12,14 @@ export default {
             // console.log(boardId);
         });
     },
+    getMyUsername() {
+        var me = Meteor.user() || {};
+        if (me.profile && me.profile.name) {
+            return me.profile.name;
+        } else {
+            return me.username;
+        }
+    },
     read: function () {
         Meteor.call('getUsers', function (err, users) {
             if (err) {
