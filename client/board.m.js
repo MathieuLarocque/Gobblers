@@ -17,19 +17,22 @@ export default {
             board: emptyBoard, 
             player1: Meteor.userId()
         });
-        this.dispatch(emptyBoard);
+        // this.dispatch(emptyBoard);
+        return this.id;
     },
-    read: function () {
+    getBoard: function () {
         var game = db.findOne(this.id);
         if (game && game.board) {
             return game.board;
         } else {
-            return {};
+            return [];
         }
     },
     readAndDispatch: function () {
-        var board = this.read();
-        this.dispatch(board);
+        var board = this.getBoard();
+        if (board.length) {
+            this.dispatch(board);
+        } 
     },
     update: function (coords, gobblers) {
         Meteor.call('update', coords, gobblers, this.id, function () {

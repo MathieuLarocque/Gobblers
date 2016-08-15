@@ -12,6 +12,7 @@ function createReducer (model) {
         for (var i = 0; i < propNames.length; i++ ) {
             if (action.type === propNames[i]) {
                 var newState = Object.assign({}, state, {[propNames[i]]: action.payload});
+                console.log(propNames[i], newState);
                 return newState;
             }
         }
