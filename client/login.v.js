@@ -1,12 +1,11 @@
 'use strict';
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
 import { browserHistory } from 'react-router';
 
 export default class Login extends React.Component {
-
     constructor(props) {
         super(props);
+        this.submitUser = this.submitUser.bind(this);
     }
     submitUser(event) {
         event.preventDefault();
@@ -18,11 +17,11 @@ export default class Login extends React.Component {
                 name: this.refs.name.value
             }
         };
-        this.props.model.users.create(options)
+        this.props.model.login.register(options)
     }
     render() {
         return (
-    <form onSubmit={this.submitUser.bind(this)}>
+    <form onSubmit={this.submitUser}>
         <div className="form-group">
             <label htmlFor="name">Full name:</label>
             <input placeholder="Name" type="text" id="name" ref="name" className="form-control"/>

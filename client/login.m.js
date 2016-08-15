@@ -1,20 +1,14 @@
+import { Accounts } from 'meteor/accounts-base';
 import { browserHistory } from 'react-router';
-var Challenges = new Mongo.Collection("challenges");
+import { Meteor } from 'meteor/meteor';
 
 export default {    
-    create: function (options) {
+    register: function (options) {
         Accounts.createUser(options, err => {
             if (err) {
                 console.log("there was an error: " + err.reason);
             } else { 
-                browserHistory.push('/leaderboard')
-                Meteor.call('getUsers', function (err, users) {
-                        if (err) {
-                            console.log("there was an error: " + err.reason);
-                        } else { 
-                            this.dispatch(users);
-                        }
-                });
+                browserHistory.push('/leaderboard');
             };
         });
     },

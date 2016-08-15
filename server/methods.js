@@ -8,9 +8,6 @@ Meteor.publish('challenges', function () {
 Meteor.startup(() => {
   
   Meteor.methods({
-    makeMove: function (boardId, newBoard) {
-      return Boards.update(boardId, {$set: {board: newBoard}});
-    },
     getUsers: function () {
       var users = Meteor.users;
       var usersList = users.find().fetch();

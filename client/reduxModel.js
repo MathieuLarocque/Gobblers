@@ -55,7 +55,9 @@ export function createStore (newModel) {
 }
 
 export var connectModel = connect(state => Object.assign({}, state, {model}));
-export function bindModel (component) {
+
+export function bindModel (f) {
+    connect()
     // connectedComponents.push(component);
     return m(component);
 }

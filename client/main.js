@@ -1,4 +1,5 @@
 'use strict';
+import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -7,22 +8,15 @@ import { Router, Route, Link, browserHistory } from 'react-router';
 import { createStore, getModel, addModel } from './reduxModel.js';
 import Board from './board.c.js';
 import board from './board.m.js';
-import Login from './login.v.js';
+import Login from './login.c.js';
 import login from './login.m.js';
-import Leaderboard from './leaderboard.v.js';
+import Leaderboard from './leaderboard.c.js';
 import leaderboard from './leaderboard.m.js';
 // import { Accounts, STATES } from 'meteor/std:accounts-ui';
 // import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
 var model = { board, login, leaderboard };
 var store = createStore(model);
-console.log(model);
-var model2 = getModel();
-console.log(model2);
-// var connectModel = connect(state => Object.assign({}, state, {model}));
-// Login = connectModel(Login);
-// Leaderboard = connectModel(Leaderboard);
-// Board = connectModel(Board);
 
 Meteor.startup(function () {
   var id = model.board.create();

@@ -1,5 +1,7 @@
 import { browserHistory } from 'react-router';
 import { addModel } from './reduxModel.js';
+import { Meteor } from 'meteor/meteor';
+
 
 var db = new Mongo.Collection("boards");
 Meteor.subscribe('allBoards');
