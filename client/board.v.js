@@ -9,6 +9,9 @@ export default class Board extends React.Component {
     super(props);
   }
 
+  componentWillMount() {
+
+  }
   componentDidMount() {
   }
 

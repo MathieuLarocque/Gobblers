@@ -12,15 +12,19 @@ import Login from './login.c.js';
 import login from './login.m.js';
 import Leaderboard from './leaderboard.c.js';
 import leaderboard from './leaderboard.m.js';
+import challenge from './challenge.m.js'
 // import { Accounts, STATES } from 'meteor/std:accounts-ui';
 // import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
-var model = { board, login, leaderboard };
+var model = { board, login, leaderboard, challenge };
 var store = createStore(model);
 
 Meteor.startup(function () {
-  var id = model.board.create();
-  Tracker.autorun(model.board.readAndDispatch.bind(model.board));
+  console.log(Meteor.user());
+  Tracker.autorun(login.readAndDispatch);
+  Tracker.autorun(board.readAndDispatch);
+  Tracker.autorun(challenge.readAndDispatch);
+  Tracker.autorun(leaderboard.readAndDispatch);
   // Tracker.autorun(() => {
   //   var challenge = data.fetchChallenges();
   //   store.dispatch({
@@ -35,15 +39,31 @@ Meteor.startup(function () {
   //     me: me
   //   });
   // });
-  ReactDOM.render(
-    <Provider store={store}>
-      <Router history={browserHistory}>
-        <Route path="/" component={ Board } />
-        <Route path="/login" component={ Login } />
-        <Route path="/leaderboard" component={Leaderboard} />
-      </Router>
-    </Provider>,
-    document.getElementById('app')
-  );
+  // Tracker.autorun(function () {
+  //   var me = Meteor.user();
+  //   if (!(me && me._id)) {
+  //     console.log('no', store);
+  //     ReactDOM.render(
+  //       <Provider store={store}>
+  //         <Router history={browserHistory}>
+  //           <Route path="*" component={ Login } />
+  //         </Router>
+  //       </Provider>,
+  //       document.getElementById('app')
+  //     );
+  //   } else {
+  //     console.log('yes', store);
+    ReactDOM.render(
+      <Provider store={store}>
+        <Router history={browserHistory}>
+          <Route path="/" component={ Leaderboard } />
+          <Route path="/login" component={ Login } />
+          <Route path="/board/:id" component={ Board } />
+        </Router>
+      </Provider>,
+      document.getElementById('app')
+    );
+    // }
+  // });
 });
 

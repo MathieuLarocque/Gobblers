@@ -139,6 +139,15 @@ button {
   cursor: pointer;
 }
 
+.headerbar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.signoutbutton {
+
+}
+
 .landing {
     margin: 50px;
     margin-top: 80px;

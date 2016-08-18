@@ -23,6 +23,12 @@ function createReducer (model) {
 export function Reduxify (store, model) {
     var propNames = Object.keys(model);
     propNames.map(name => {
+        var methodNames = Object.keys(model[name]);
+        methodNames.map(methodName => {
+            if (typeof model[name][methodName] === 'function') {
+                model[name][methodName] = model[name][methodName].bind(model[name]);
+            }
+        });
         model[name].dispatch = data => {
             console.log(name, data);
             store.dispatch({

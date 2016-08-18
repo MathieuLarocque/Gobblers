@@ -1,23 +1,23 @@
 import { browserHistory } from 'react-router';
 import { Meteor } from 'meteor/meteor';
 
-var Challenges = new Mongo.Collection("challenges");
-
 Meteor.subscribe('leaderboard');
-Meteor.subscribe('challenges');
 
 export default {    
-    create: function () {
-        Meteor.call('createChallenge', user, function (err, boardId) {
+    challengeSomebody: function (id) {
+        Meteor.call('createChallenge', id, function (err, boardId) {
             // console.log(boardId);
         });
     },
-    getMyUsername() {
-        var me = Meteor.user() || {};
-        if (me.profile && me.profile.name) {
-            return me.profile.name;
-        } else {
-            return me.username;
+    
+    getUsers() {
+        return Meteor.users.find();
+    },
+    readAndDispatch() {
+        var leaderboard = this.getUsers().fetch();
+        // browserHistory.push('/login');
+        if (leaderboard.length) {
+            this.dispatch(leaderboard);
         }
     },
     read: function () {
