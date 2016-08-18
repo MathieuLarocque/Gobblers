@@ -23,3 +23,4 @@ ultimatejs:tracker-react
 accounts-password
 accounts-ui@1.1.9
 std:accounts-ui
+meteortypescript:compiler
