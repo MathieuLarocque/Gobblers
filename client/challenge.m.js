@@ -10,7 +10,15 @@ export default {
     id: '',
     getChallenge() {
         var userId = Meteor.userId();
+        var c = Challenges.findOne({opponent: userId});
+        console.log('challenge', c);
         return Challenges.findOne({opponent: userId});
+    },
+    create() {
+        Meteor.call('createChallenge', (err, id) => {
+            console.log(id, err);
+            this.id = id;
+        });
     },
     readAndDispatch() {
         var newChallenge = this.getChallenge();

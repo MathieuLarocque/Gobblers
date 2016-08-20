@@ -2,10 +2,14 @@
 var Boards = new Mongo.Collection("boards");
 
 Meteor.publish('allBoards', function () {
-    return Boards.find();
+    if (this.userId) {
+      return Boards.find();
+    }
 });
 Meteor.publish('leaderboard', function () {
-    return Meteor.users.find();
+    if (this.userId) {
+      return Meteor.users.find();
+    }
 });
 
 Boards.allow({

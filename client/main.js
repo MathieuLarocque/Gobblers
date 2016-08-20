@@ -25,34 +25,6 @@ Meteor.startup(function () {
   Tracker.autorun(board.readAndDispatch);
   Tracker.autorun(challenge.readAndDispatch);
   Tracker.autorun(leaderboard.readAndDispatch);
-  // Tracker.autorun(() => {
-  //   var challenge = data.fetchChallenges();
-  //   store.dispatch({
-  //     type: 'CHALLENGE',
-  //     challenge: challenge
-  //   });
-  // });
-  // Tracker.autorun(() => {
-  //   var me = Meteor.userId();
-  //   store.dispatch({
-  //     type: 'UPDATE_ME',
-  //     me: me
-  //   });
-  // });
-  // Tracker.autorun(function () {
-  //   var me = Meteor.user();
-  //   if (!(me && me._id)) {
-  //     console.log('no', store);
-  //     ReactDOM.render(
-  //       <Provider store={store}>
-  //         <Router history={browserHistory}>
-  //           <Route path="*" component={ Login } />
-  //         </Router>
-  //       </Provider>,
-  //       document.getElementById('app')
-  //     );
-  //   } else {
-  //     console.log('yes', store);
     ReactDOM.render(
       <Provider store={store}>
         <Router history={browserHistory}>
@@ -63,7 +35,5 @@ Meteor.startup(function () {
       </Provider>,
       document.getElementById('app')
     );
-    // }
-  // });
 });
 

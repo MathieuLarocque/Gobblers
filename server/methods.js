@@ -3,7 +3,9 @@ import { Meteor } from 'meteor/meteor';
 import Boards from './Boards.js'
 var Challenges = new Mongo.Collection("challenges");
 Meteor.publish('challenges', function () {
+  if (this.userId){
     return Challenges.find();
+  }
 });
 Meteor.startup(() => {
   

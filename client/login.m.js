@@ -17,6 +17,16 @@ export default {
     getMe() {
         return Meteor.user();
     },
+    signout() {
+        Meteor.logout(err => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log('Logging out!');
+                this.dispatch(null);
+            }
+        });
+    },
     getLoginComponent() {
         return LoginComponent;
     },

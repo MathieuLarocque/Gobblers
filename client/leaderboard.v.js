@@ -58,7 +58,10 @@ export default class Leaderboard extends React.Component {
     }
     return (
     <div className="list">
-        <div className="headerbar"><h2>{me}</h2><button className="signoutbutton">signout</button></div>
+        <div className="headerbar">
+            <h2>{me}</h2>
+            <button className="signoutbutton" onClick={model.login.signout}>signout</button>
+        </div>
         <Challenge />
         {userList}
     </div>);
