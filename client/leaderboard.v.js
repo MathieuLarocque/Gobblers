@@ -7,6 +7,7 @@ export default class Leaderboard extends React.Component {
 
   constructor(props) {
     super(props);
+    this.quickPlay = this.quickPlay.bind(this);
   }
 
   componentWillMount() {
@@ -28,9 +29,14 @@ export default class Leaderboard extends React.Component {
 
   challenge(user) {
       function f () {
+          console.log('challenging', user);
           this.props.model.challenge.create(user);
       }
       return f.bind(this);
+  }
+
+  quickPlay(event) {
+      this.props.model.leaderboard.quickPlay(this.props.login._id);
   }
 
   render() {
@@ -62,6 +68,7 @@ export default class Leaderboard extends React.Component {
             <h2>{me}</h2>
             <button className="signoutbutton" onClick={model.login.signout}>signout</button>
         </div>
+        <button onClick={this.quickPlay}>Quick play</button>
         <Challenge />
         {userList}
     </div>);

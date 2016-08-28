@@ -10,13 +10,32 @@ export default class Board extends React.Component {
   }
 
   componentWillMount() {
-
+    var { params, model } = this.props;
+    var { boardId } = params;
+    this.runner = model.board.createAutorun(boardId);
+    console.log(boardId);
+    console.log(this.runner);
   }
   componentDidMount() {
   }
 
+  componentWillUnmount() {
+    this.runner.stop();
+  }
+
   render() {
-    var { board } = this.props;
+    var { board, params, login } = this.props;
+    console.log(board);
+    console.log(login);
+    if (!board) {
+      return (<div></div>);
+    }
+    var game = board;
+    board = board.board;
+    var playerColor = game.red === login._id ? 'red' : game.green === login._id ? 'green' : null;
+    console.log(playerColor);
+    // var { boardId } = params;
+    // console.log(boardId);
     // let announcement;
     // if (this.state.winner) {
     //   const msg = this.state.winner > 2 ? 'It\'s a tie!' : 'Player '+this.state.winner+' wins!';
@@ -45,9 +64,9 @@ export default class Board extends React.Component {
           { grid }
         </div>
         <div className="unplayedGobblers">
-          <span className="unplayedGobbler"><Gobbler color="green" size="small" sizeNum={1} /></span>
-          <span className="unplayedGobbler"><Gobbler color="green" size="medium" sizeNum={2} /></span>
-          <span className="unplayedGobbler"><Gobbler color="green" size="big" sizeNum={3} /></span>
+          <span className="unplayedGobbler"><Gobbler color={playerColor} size="small" sizeNum={1} /></span>
+          <span className="unplayedGobbler"><Gobbler color={playerColor} size="medium" sizeNum={2} /></span>
+          <span className="unplayedGobbler"><Gobbler color={playerColor} size="big" sizeNum={3} /></span>
         </div>
       </div>
     );

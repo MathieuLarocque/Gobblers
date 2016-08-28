@@ -44,18 +44,20 @@ export default class Challenge extends React.Component {
     var { challenge, model } = this.props;
     var { accept, refuse } = model.challenge;
     challenge = challenge || {};
+    var { _id } = challenge;
+    console.log(challenge);
     return (
     <div>
         <Modal
             isOpen={challenge.pending}
-            onRequestClose={refuse}
+            onRequestClose={refuse(_id)}
             style={customStyles} >
 
             <h2 >You have been challenged!</h2>
             <div >by {challenge.challenger}</div>
             <p>
-                <button onClick={accept}>accept</button>
-                <button onClick={refuse}>refuse</button>
+                <button onClick={accept(_id)}>accept</button>
+                <button onClick={refuse(_id)}>refuse</button>
             </p>
         </Modal>
     </div>);

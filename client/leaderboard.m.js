@@ -9,7 +9,11 @@ export default {
             // console.log(boardId);
         });
     },
-    
+    quickPlay(userId) {
+        Meteor.call('quickPlay', userId, function (err, boardId) {
+            browserHistory.push('/board/' + boardId);
+        });
+    },
     getUsers() {
         return Meteor.users.find();
     },

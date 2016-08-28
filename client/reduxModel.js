@@ -12,7 +12,7 @@ function createReducer (model) {
         for (var i = 0; i < propNames.length; i++ ) {
             if (action.type === propNames[i]) {
                 var newState = Object.assign({}, state, {[propNames[i]]: action.payload});
-                console.log(propNames[i], newState);
+                // console.log(propNames[i], newState);
                 return newState;
             }
         }
@@ -30,7 +30,7 @@ export function Reduxify (store, model) {
             }
         });
         model[name].dispatch = data => {
-            console.log(name, data);
+            // console.log(name, data);
             store.dispatch({
                 type: name,
                 payload: data
@@ -55,7 +55,7 @@ export function createStore (newModel) {
     store = createReduxStore(createReducer(newModel));
     // Object.assign(model, props);
     model = newModel;
-    console.log(newModel);
+    // console.log(newModel);
     Reduxify(store, newModel);
     return store;
     // return connect(state => Object.assign({}, state, {model}));

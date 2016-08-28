@@ -32,10 +32,3 @@ export default class Cell extends React.Component {
   }
 }
 
-Cell.propTypes = { 
-    coords: React.PropTypes.string,
-    cell: React.PropTypes.string,
-    board: React.PropTypes.array,
-    id: React.PropTypes.string
-};
-// Cell.defaultProps = { freezeBoard: false };

@@ -9,30 +9,41 @@ Meteor.subscribe('challenges');
 export default {    
     id: '',
     getChallenge() {
-        var userId = Meteor.userId();
-        var c = Challenges.findOne({opponent: userId});
+        // var userId = Meteor.userId();
+        var c = Challenges.findOne();
         console.log('challenge', c);
-        return Challenges.findOne({opponent: userId});
+        return c;
     },
-    create() {
-        Meteor.call('createChallenge', (err, id) => {
+    create(opponent) {
+        Meteor.call('createChallenge',  opponent, (err, id) => {
             console.log(id, err);
             this.id = id;
         });
     },
     readAndDispatch() {
         var newChallenge = this.getChallenge();
-        if (newChallenge && newChallenge.opponent) {
+        if (newChallenge && newChallenge._id) {
             this.id = newChallenge._id;
             this.dispatch(Object.assign(newChallenge, { pending: true }));
         } 
     },
-    accept() {
-        Meteor.call('acceptChallenge', this.id, function (err, boardId) {
-            browserHistory.push('/board/' + boardId);
-        });
+    accept(id) {
+        return function () {
+            Meteor.call('acceptChallenge', id, function (err, boardId) {
+                // browserHistory.push('/board/' + boardId);
+            });
+        }
     },
-    refuse() {},
+    refuse(id) {
+        return () => {
+            Meteor.call('refuseChallenge', id, (err, n) => {
+                console.log(n);
+                if (n === 1) {
+                    this.dispatch(null);
+                }
+            });
+        }
+    },
     update: function () {},
     remove: function () {
     }

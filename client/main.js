@@ -20,9 +20,8 @@ var model = { board, login, leaderboard, challenge };
 var store = createStore(model);
 
 Meteor.startup(function () {
-  console.log(Meteor.user());
   Tracker.autorun(login.readAndDispatch);
-  Tracker.autorun(board.readAndDispatch);
+  // Tracker.autorun(board.readAndDispatch);
   Tracker.autorun(challenge.readAndDispatch);
   Tracker.autorun(leaderboard.readAndDispatch);
     ReactDOM.render(
@@ -30,7 +29,7 @@ Meteor.startup(function () {
         <Router history={browserHistory}>
           <Route path="/" component={ Leaderboard } />
           <Route path="/login" component={ Login } />
-          <Route path="/board/:id" component={ Board } />
+          <Route path="/board/:boardId" component={ Board } />
         </Router>
       </Provider>,
       document.getElementById('app')
