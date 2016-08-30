@@ -69,7 +69,6 @@ export default class Leaderboard extends React.Component {
             <button className="signoutbutton" onClick={model.login.signout}>signout</button>
         </div>
         <button onClick={this.quickPlay}>Quick play</button>
-        <Challenge />
         {userList}
     </div>);
   }

@@ -5,18 +5,21 @@ import { connectModel } from './reduxModel.js';
 const events = {
   drop(props, monitor, component) {
     var gobbler = monitor.getItem();
-    var { gobblers, coords, model } = props;
+    var { gobblers, coords } = props;
+    return { gobblers, coords };
+  },
+  canDrop(props, monitor) {
+    var gobbler = monitor.getItem();
+    var { gobblers } = props;
     if (gobblers.length > 0) {
         var lastGobbler = gobblers[gobblers.length - 1];
         if (lastGobbler && gobbler.sizeNum > lastGobbler.sizeNum) {
-            model.board.update(coords, gobblers.concat(gobbler));
-            return {moved: true};
+            return true;
         }
     } else {
-      model.board.update(coords, gobblers.concat(gobbler));
-      return {moved: true};
+      return true;
     }
-    return {moved: false};
+    return false;
   }
 };
 

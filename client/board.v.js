@@ -13,8 +13,6 @@ export default class Board extends React.Component {
     var { params, model } = this.props;
     var { boardId } = params;
     this.runner = model.board.createAutorun(boardId);
-    console.log(boardId);
-    console.log(this.runner);
   }
   componentDidMount() {
   }
@@ -25,15 +23,12 @@ export default class Board extends React.Component {
 
   render() {
     var { board, params, login } = this.props;
-    console.log(board);
-    console.log(login);
     if (!board) {
       return (<div></div>);
     }
     var game = board;
     board = board.board;
     var playerColor = game.red === login._id ? 'red' : game.green === login._id ? 'green' : null;
-    console.log(playerColor);
     // var { boardId } = params;
     // console.log(boardId);
     // let announcement;

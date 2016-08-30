@@ -11,19 +11,28 @@ const events = {
     return {
       size: props.size,
       sizeNum: props.sizeNum,
-      color: props.color,
-      origin: coords
+      color: props.color
     };
   },
   endDrag(props, monitor) {
+    var gobblerDropped = monitor.getItem();
+    var { model, coords } = props;
     var res = monitor.getDropResult() || {};
-    if (!res.moved) {
-        var gobbler = monitor.getItem();
-        var { gobblers, coords, model } = props;
-        console.log(gobblers, gobbler);
-        if (coords) {
-          model.board.pushGobbler(coords, gobbler);
-        }
+    if (res.coords) {
+      model.board.pushGobbler(res.coords, gobblerDropped);
+    } else if (coords) {
+      model.board.pushGobbler(coords, gobblerDropped);
+    }
+  },
+  canDrag(props, monitor) {
+    console.log(props);
+    var { board, login, color } = props;
+    if (board && login && color) {
+      if (board.red === login._id && color === 'red') {
+        return true;
+      } else if (board.green === login._id && color === 'green') {
+        return true;
+      }
     }
   }
 };

@@ -44,13 +44,17 @@ Meteor.startup(() => {
           boardId = Boards.insert({
               board: emptyBoard, 
               red: this.userId,
-              green: c.challenger
+              green: c.challenger,
+              poped: null,
+              turn: 'green'
           });
         } else if (c.challenger === this.userId) {
           boardId = Boards.insert({
               board: emptyBoard,
               red: c.opponent,
-              green: this.userId
+              green: this.userId,
+              poped: null,
+              turn: 'green'
           });
         }
         if (!boardId) {
@@ -75,7 +79,9 @@ Meteor.startup(() => {
       } else {
          quickPlayWaitingBoard = Boards.insert({
             board: emptyBoard, 
-            red: this.userId
+            red: this.userId,
+            poped: null,
+            turn: this.userId
          });
          return quickPlayWaitingBoard;
       }
@@ -93,17 +99,30 @@ Meteor.startup(() => {
     },
     pushGobbler: function (coords, gobbler, id) {
         var [row, col] = coords.split('_');
-        var board = Boards.findOne(id).board;
-        board[row][col].push(gobbler);
-        console.log(board[row][col]);
-        return Boards.update(id, {$set: {board: board}});
+        var game = Boards.findOne(id);
+        if (game && game.turn === this.userId) {
+          var board = game.board;
+          board[row][col].push(gobbler);
+          if (game.poped && game.poped === coords) {
+            return Boards.update(id, {$set: {board: board, poped: null}});
+          } else {
+            if (game.red === this.userId) {
+              return Boards.update(id, {$set: {board: board, poped: null, turn: game.green}});
+            } else if (game.green === this.userId) {
+              return Boards.update(id, {$set: {board: board, poped: null, turn: game.red}});
+            }
+          }
+        }
     },
     popGobbler: function (coords, id) {
         var [row, col] = coords.split('_');
-        var board = Boards.findOne(id).board;
-        board[row][col].pop();
-        console.log(board[row][col]);
-        return Boards.update(id, {$set: {board: board}});
+        var game = Boards.findOne(id);
+        if (game && game.turn === this.userId) {
+          var board = game.board;
+          board[row][col].pop();
+          console.log(board[row][col]);
+          return Boards.update(id, {$set: {board: board, poped: coords}});
+        }
     },
     createBoard: function () {
       return Boards.insert({});

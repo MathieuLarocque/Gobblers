@@ -11,7 +11,6 @@ export default {
     getChallenge() {
         // var userId = Meteor.userId();
         var c = Challenges.findOne();
-        console.log('challenge', c);
         return c;
     },
     create(opponent) {
