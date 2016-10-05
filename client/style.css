@@ -2,8 +2,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  
 }
+body {
+  background: black;
+  color: white;
+
+}
+
 .grid {
   position: relative;
   display: flex;
@@ -19,17 +24,24 @@
 
 .cell {
   display: flex;
-  width: 150px;
-  height: 150px;
-  border-radius: 75px;
-  opacity: .75;
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+  opacity: 1;
   background-color: #aaa;
   box-shadow: 2px 2px 0px #888888;
   transition: all 0.2s;
 }
 
+.rightButton {
+  position: absolute;
+  right: 5px;
+  top: 300px;
+  font-size: 2em;
+}
+
 .gobbler {
-  opacity: .75;
+  opacity: 1;
   box-shadow: 2px 2px 0px #888888;
   transition: all 0.2s;
   cursor: pointer;
@@ -39,8 +51,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   border: none;
 }
 
@@ -70,21 +82,21 @@
 }
 
 .small {
-  width: 50px;
-  height: 50px;
-  border-radius: 25px;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
 }
 
 .medium {
-  width: 100px;
-  height: 100px;
-  border-radius: 50px;
+  width: 80px;
+  height: 80px;
+  border-radius: 40px;
 }
 
 .big {
-  width: 150px;
-  height: 150px;
-  border-radius: 75px;
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
 }
 
 .username {

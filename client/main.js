@@ -5,34 +5,36 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import "./main.html";
 import { Router, Route, Link, browserHistory } from 'react-router';
-import { createStore, getModel, addModel } from './reduxModel.js';
+import { model, store } from './model';
 import Board from './board.c.js';
-import board from './board.m.js';
 import Login from './login.c.js';
-import login from './login.m.js';
 import Leaderboard from './leaderboard.c.js';
-import leaderboard from './leaderboard.m.js';
-import challenge from './challenge.m.js'
 // import { Accounts, STATES } from 'meteor/std:accounts-ui';
 // import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
-var model = { board, login, leaderboard, challenge };
-var store = createStore(model);
-
 Meteor.startup(function () {
-  Tracker.autorun(login.readAndDispatch);
-  // Tracker.autorun(board.readAndDispatch);
-  Tracker.autorun(challenge.readAndDispatch);
-  Tracker.autorun(leaderboard.readAndDispatch);
-    ReactDOM.render(
-      <Provider store={store}>
-        <Router history={browserHistory}>
-          <Route path="/" component={ Leaderboard } />
-          <Route path="/login" component={ Login } />
-          <Route path="/board/:boardId" component={ Board } />
-        </Router>
-      </Provider>,
-      document.getElementById('app')
-    );
+  Tracker.autorun(run => {
+    var me = Meteor.user();
+    if (me && me._id) {
+      model.login.setState(me);
+    } 
+  });
+  Tracker.autorun(run => {
+    var leaderboard = Meteor.users.find().fetch();
+    // browserHistory.push('/login');
+    if (leaderboard.length) {
+      model.leaderboard.setState(leaderboard);
+    }
+  });
+  ReactDOM.render(
+    <Provider store={store}>
+      <Router history={browserHistory}>
+        <Route path="/" component={ Leaderboard } />
+        <Route path="/login" component={ Login } />
+        <Route path="/board/:boardId" component={ Board } />
+      </Router>
+    </Provider>,
+    document.getElementById('app')
+  );
 });
 

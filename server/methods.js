@@ -1,6 +1,7 @@
 'use strict';
 import { Meteor } from 'meteor/meteor';
-import Boards from './Boards.js'
+import Boards from './Boards.js';
+import checkwin from './checkwin.js';
 var Challenges = new Mongo.Collection("challenges");
 Meteor.publish('challenges', function () {
   if (this.userId){
@@ -16,6 +17,9 @@ var quickPlayWaitingBoard = null;
 var emptyBoard = [[ [], [], [] ], 
                   [ [], [], [] ], 
                   [ [], [], [] ]];
+var emptyCube = [[ [], [], [] ], 
+[ [], [], [] ], 
+[ [], [], [] ]];
 Meteor.startup(() => {
   
   Meteor.methods({
@@ -81,7 +85,8 @@ Meteor.startup(() => {
             board: emptyBoard, 
             red: this.userId,
             poped: null,
-            turn: this.userId
+            turn: this.userId,
+            winner: null
          });
          return quickPlayWaitingBoard;
       }
@@ -100,10 +105,19 @@ Meteor.startup(() => {
     pushGobbler: function (coords, gobbler, id) {
         var [row, col] = coords.split('_');
         var game = Boards.findOne(id);
-        if (game && game.turn === this.userId) {
+        if (game && this.userId && !game.winner && game.turn === this.userId) {
           var board = game.board;
           board[row][col].push(gobbler);
-          if (game.poped && game.poped === coords) {
+          var winningColor = checkwin(board);
+          console.log('winner :', winningColor);
+          if (winningColor === 'red') {
+            var winner = game.red;
+            console.log('winner id : ', winner);
+            return Boards.update(id, {$set: {board: board, poped: null, winner}});
+          } else if (winningColor === 'green') {
+            var winner = game.green;
+            return Boards.update(id, {$set: {board: board, poped: null, winner}});
+          } else if (game.poped && game.poped === coords) {
             return Boards.update(id, {$set: {board: board, poped: null}});
           } else {
             if (game.red === this.userId) {
@@ -117,11 +131,19 @@ Meteor.startup(() => {
     popGobbler: function (coords, id) {
         var [row, col] = coords.split('_');
         var game = Boards.findOne(id);
-        if (game && game.turn === this.userId) {
+        if (game && this.userId && !game.winner && game.turn === this.userId) {
           var board = game.board;
           board[row][col].pop();
-          console.log(board[row][col]);
-          return Boards.update(id, {$set: {board: board, poped: coords}});
+          var winningColor = checkwin(board);
+          if (winningColor === 'red') {
+            var winner = game.red;
+            return Boards.update(id, {$set: {board: board, poped: null, winner}});
+          } else if (winningColor === 'green') {
+            var winner = game.green;
+            return Boards.update(id, {$set: {board: board, poped: null, winner}});
+          } else {
+            return Boards.update(id, {$set: {board: board, poped: coords}});
+          }
         }
     },
     createBoard: function () {

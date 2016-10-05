@@ -21,7 +21,7 @@ export default {
         var leaderboard = this.getUsers().fetch();
         // browserHistory.push('/login');
         if (leaderboard.length) {
-            this.dispatch(leaderboard);
+            this.setState(leaderboard);
         }
     },
     read: function () {
@@ -29,7 +29,7 @@ export default {
             if (err) {
                 console.log("there was an error: " + err.reason);
             } else { 
-                this.dispatch(users);
+                this.setState(users);
             }
         });
     },

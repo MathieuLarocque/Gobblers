@@ -1,6 +1,35 @@
 import { DropTarget } from 'react-dnd';
-import Cell from './cell.v.js';
-import { connectModel } from './reduxModel.js';
+import { connect } from 'react-redux';
+import React from 'react';
+import Gobbler from './gobbler.c.js';
+
+class Cell extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    var { gobblers, coords } = this.props;
+    let lastGobbler = false;
+    if (gobblers.length > 0) {
+      lastGobbler = gobblers[gobblers.length - 1];
+    }
+    let lastGobblerComp;
+    if (lastGobbler) {
+      lastGobblerComp = (<div className="gobblercontainer" >
+      <Gobbler color={lastGobbler.color} 
+              size={lastGobbler.size} 
+              sizeNum={lastGobbler.sizeNum}
+              gobblers={gobblers}
+              coords={coords}>
+      </Gobbler></div> )
+    }
+    return this.props.connectDropTarget( 
+      <div className="cell"  data-cell={ this.props.coords }>
+        {lastGobblerComp}
+      </div> 
+    )
+  }
+}
 
 const events = {
   drop(props, monitor, component) {
@@ -35,4 +64,9 @@ function mapProps(connect, monitor) {
 
 var dnd = DropTarget("gobbler", events, mapProps);
 
-export default connectModel(dnd(Cell));
+var connectRedux = connect(state => Object.assign({}, {
+    board: state.board
+}));
+
+
+export default connectRedux(dnd(Cell));

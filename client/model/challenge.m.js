@@ -7,7 +7,6 @@ Meteor.subscribe('leaderboard');
 Meteor.subscribe('challenges');
 
 export default {    
-    id: '',
     getChallenge() {
         // var userId = Meteor.userId();
         var c = Challenges.findOne();
@@ -16,14 +15,12 @@ export default {
     create(opponent) {
         Meteor.call('createChallenge',  opponent, (err, id) => {
             console.log(id, err);
-            this.id = id;
         });
     },
     readAndDispatch() {
         var newChallenge = this.getChallenge();
         if (newChallenge && newChallenge._id) {
-            this.id = newChallenge._id;
-            this.dispatch(Object.assign(newChallenge, { pending: true }));
+            this.setState(Object.assign(newChallenge, { pending: true }));
         } 
     },
     accept(id) {
@@ -38,7 +35,7 @@ export default {
             Meteor.call('refuseChallenge', id, (err, n) => {
                 console.log(n);
                 if (n === 1) {
-                    this.dispatch(null);
+                    this.setState(null);
                 }
             });
         }

@@ -1,10 +1,25 @@
 import { DragSource } from 'react-dnd';
-import Gobbler from './gobbler.v.js';
-import { connectModel } from './reduxModel.js';
+import { connect } from 'react-redux';
+import React from 'react';
+import { model } from './model';
+
+class Gobbler extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render () {
+    const { isDragging, connectDragSource } = this.props;
+    const classesnames = "gobbler " + this.props.size + " " + this.props.color;
+    return connectDragSource(
+      <div className={ classesnames }></div>
+    )
+  }
+}
+
 
 const events = {
   beginDrag (props) {
-    var { gobblers, coords, model } = props;
+    var { gobblers, coords } = props;
     if (gobblers && gobblers.length > 0 && coords) {
         model.board.popGobbler(coords);
     }
@@ -25,7 +40,6 @@ const events = {
     }
   },
   canDrag(props, monitor) {
-    console.log(props);
     var { board, login, color } = props;
     if (board && login && color) {
       if (board.red === login._id && color === 'red') {
@@ -46,4 +60,8 @@ function mapProps(connect, monitor) {
 
 var dnd = DragSource("gobbler", events, mapProps);
 
-export default connectModel(dnd(Gobbler));
+var connectRedux = connect(state => Object.assign({}, {
+    board: state.board
+}));
+
+export default connectRedux(dnd(Gobbler));

@@ -1,7 +1,5 @@
 import { browserHistory } from 'react-router';
-import { addModel } from './reduxModel.js';
 import { Meteor } from 'meteor/meteor';
-
 
 var db = new Mongo.Collection("boards");
 Meteor.subscribe('allBoards');
@@ -11,18 +9,15 @@ var emptyBoard = [[ [], [], [] ],
                   [ [], [], [] ]];
 
 export default { 
-    id: '',
     create: function () {
-        this.id = db.insert({
+        return db.insert({
             board: emptyBoard, 
             player1: Meteor.userId()
         });
-        // this.dispatch(emptyBoard);
-        return this.id;
+        // this.setState(emptyBoard);
     },
     getBoard: function (id) {
-        this.id = id || this.id;
-        var game = db.findOne(this.id);
+        var game = db.findOne(id);
         // console.log(game);
         if (game && game.board) {
             return game;
@@ -35,14 +30,14 @@ export default {
             var board = this.getBoard(id);
                 // console.log(board);
             if (board && board._id) {
-                this.dispatch(board);
+                this.setState(board);
             } 
         });
     },
     readAndDispatch: function () {
         var board = this.getBoard();
         if (board && board._id) {
-            this.dispatch(board);
+            this.setState(board);
         } 
     },
     update: function (coords, gobblers) {
