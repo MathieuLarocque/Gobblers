@@ -1,7 +1,8 @@
 import { browserHistory } from 'react-router';
 import { Meteor } from 'meteor/meteor';
 
-var db = new Mongo.Collection("boards");
+export var db = new Mongo.Collection("boards");
+
 Meteor.subscribe('allBoards');
 
 var emptyBoard = [[ [], [], [] ], 

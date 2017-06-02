@@ -47,7 +47,11 @@ class Leaderboard extends React.Component {
             <h2>{me}</h2>
             <button className="signoutbutton" onClick={model.login.signout}>signout</button>
         </div>
-        <button onClick={e => model.leaderboard.quickPlay(login._id)}>Quick play</button>
+        <button onClick={e => {
+            Meteor.call('quickPlay', login._id, function (err, boardId) {
+                browserHistory.push('/board/' + boardId);
+            });
+        }}>Quick play</button>
         {userList}
     </div>);
   }

@@ -6,12 +6,12 @@ import Gobbler from './gobbler.c.js'
 import Cell from './cell.c.js';
 import { Link } from 'react-router';
 import { model } from './model';
-
+// var db = new Mongo.Collection("boards");
+import { db } from './model/board.m.js';
 class Board extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {sideUp : 'FRONT'};
   }
 
   componentWillMount() {
@@ -28,7 +28,16 @@ class Board extends React.Component {
 
   render() {
     var { board, params, login } = this.props;
+    // console.log(board, params, login);
     if (!board) {
+      board = db.findOne(params.boardId) || [];
+      // board = model.board.getBoard(params.boardId);
+      // console.log(board);
+      if (!board) {
+        return (<div></div>);
+      }
+    }
+    if (!login) {
       return (<div></div>);
     }
     var header = (<div><Link to='/'>Quit</Link></div>);
@@ -64,14 +73,6 @@ class Board extends React.Component {
       return <div className="row" key={ rowInd }>{ cells }</div>;
     });
 
-    function flipBoard(e) {
-      switch (this.state.sideUp) {
-        case 'RIGHT':
-          this.setState({sideUp: 'FRONT'});
-        case 'FRONT':
-          this.setState({sideUp: 'RIGHT'});
-      }
-    }
 
     return (
       <div className="game">
@@ -82,7 +83,7 @@ class Board extends React.Component {
           </div>
         </div>
         <button className="rightButton"> > </button>
-        <div className="unplayedGobblers" onClick={flipBoard}>
+        <div className="unplayedGobblers" >
           <span className="unplayedGobbler"><Gobbler color={playerColor} size="small" sizeNum={1} /></span>
           <span className="unplayedGobbler"><Gobbler color={playerColor} size="medium" sizeNum={2} /></span>
           <span className="unplayedGobbler"><Gobbler color={playerColor} size="big" sizeNum={3} /></span>

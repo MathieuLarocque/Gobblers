@@ -9,6 +9,7 @@ class Gobbler extends React.Component {
   }
   render () {
     const { isDragging, connectDragSource } = this.props;
+    // console.log(this.props);
     const classesnames = "gobbler " + this.props.size + " " + this.props.color;
     return connectDragSource(
       <div className={ classesnames }></div>
@@ -19,9 +20,13 @@ class Gobbler extends React.Component {
 
 const events = {
   beginDrag (props) {
+    // console.log(props);
     var { gobblers, coords } = props;
     if (gobblers && gobblers.length > 0 && coords) {
-        model.board.popGobbler(coords);
+        // model.board.popGobbler(coords);
+        Meteor.call('popGobbler', coords, props.board._id, function () {
+            // console.log('update finished');
+        });
     }
     return {
       size: props.size,
@@ -30,21 +35,32 @@ const events = {
     };
   },
   endDrag(props, monitor) {
+    console.log(props);
+    console.log(monitor);
     var gobblerDropped = monitor.getItem();
     var { model, coords } = props;
     var res = monitor.getDropResult() || {};
+    console.log(res);
     if (res.coords) {
-      model.board.pushGobbler(res.coords, gobblerDropped);
+      Meteor.call('pushGobbler', res.coords, gobblerDropped, props.board._id, function () {
+          // console.log('update finished');
+      });
+      // model.board.pushGobbler(res.coords, gobblerDropped);
     } else if (coords) {
-      model.board.pushGobbler(coords, gobblerDropped);
+      Meteor.call('pushGobbler', coords, gobblerDropped, props.board._id, function () {
+          // console.log('update finished');
+      });
+      // model.board.pushGobbler(coords, gobblerDropped);
     }
   },
   canDrag(props, monitor) {
-    var { board, login, color } = props;
-    if (board && login && color) {
-      if (board.red === login._id && color === 'red') {
+    // console.log(props);
+    // console.log(Meteor.userId());
+    var { board, color } = props;
+    if (board && Meteor.userId() && color) {
+      if (board.red === Meteor.userId() && color === 'red') {
         return true;
-      } else if (board.green === login._id && color === 'green') {
+      } else if (board.green === Meteor.userId() && color === 'green') {
         return true;
       }
     }
