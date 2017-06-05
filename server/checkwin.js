@@ -8,7 +8,7 @@ function allEqual(arr) {
     }
     var allRed = arr.every(gobs => lastGob(gobs).color === 'red');
     var allGreen = arr.every(gobs => lastGob(gobs).color === 'green');
-    console.log(allRed, allGreen);
+    // console.log(allRed, allGreen);
     if (allRed) {
         return 'red';
     } else if (allGreen) {
@@ -18,7 +18,7 @@ function allEqual(arr) {
     }
   }
 
-export default function (board = []) {
+exports.checkwin = function checkwin (board = []) {
     // Check rows.
     for (let rowI in board) {
         let row = board[rowI];

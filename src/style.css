@@ -3,11 +3,6 @@
   align-items: center;
   justify-content: center;
 }
-body {
-  background: black;
-  color: white;
-
-}
 
 .grid {
   position: relative;
@@ -55,7 +50,11 @@ body {
   height: 120px;
   border: none;
 }
-
+.turn-gobbler {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
 .hidden {
   display: none;
 }
@@ -85,18 +84,21 @@ body {
   width: 40px;
   height: 40px;
   border-radius: 20px;
+  z-index: 1;
 }
 
 .medium {
   width: 80px;
   height: 80px;
   border-radius: 40px;
+  z-index: 2;
 }
 
 .big {
   width: 120px;
   height: 120px;
   border-radius: 60px;
+  z-index: 3;
 }
 
 .username {
@@ -154,10 +156,6 @@ button {
 .headerbar {
   display: flex;
   justify-content: space-between;
-}
-
-.signoutbutton {
-
 }
 
 .landing {
