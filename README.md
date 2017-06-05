@@ -1,6 +1,8 @@
 # Gobblers
 Game similar to tictactoe but where pieces can eat each other.
 
+You have to use npm install or yarn before npm start.
+
 ## Create React App
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
