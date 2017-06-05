@@ -1,14 +1,10 @@
 import { DropTarget } from 'react-dnd';
-import { connect } from 'react-redux';
 import React from 'react';
 import Gobbler from './gobbler.c.js';
 
 class Cell extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
-    var { gobblers, coords } = this.props;
+    var { gobblers, coords, playerColor } = this.props;
     let lastGobbler = false;
     if (gobblers.length > 0) {
       lastGobbler = gobblers[gobblers.length - 1];
@@ -20,6 +16,7 @@ class Cell extends React.Component {
               size={lastGobbler.size} 
               sizeNum={lastGobbler.sizeNum}
               gobblers={gobblers}
+              canTake={playerColor === lastGobbler.color}
               coords={coords}>
       </Gobbler></div> )
     }
@@ -33,20 +30,25 @@ class Cell extends React.Component {
 
 const events = {
   drop(props, monitor, component) {
-    var gobbler = monitor.getItem();
+    // var gobbler = monitor.getItem();
     var { gobblers, coords } = props;
+    // console.log('drop', props, monitor, component);
     return { gobblers, coords };
   },
   canDrop(props, monitor) {
     var gobbler = monitor.getItem();
     var { gobblers } = props;
-    if (gobblers.length > 0) {
-        var lastGobbler = gobblers[gobblers.length - 1];
-        if (lastGobbler && gobbler.sizeNum > lastGobbler.sizeNum) {
-            return true;
+    if (gobblers && gobblers.length < 3) {
+        if (gobblers.length) {
+          var lastGobbler = gobblers[gobblers.length - 1];
+          if (lastGobbler && gobbler.sizeNum > lastGobbler.sizeNum) {
+              // console.log('candrop', props);
+              return true;
+          }
+        } else {
+          // console.log('candrop', props);
+          return true;
         }
-    } else {
-      return true;
     }
     return false;
   }
@@ -64,9 +66,5 @@ function mapProps(connect, monitor) {
 
 var dnd = DropTarget("gobbler", events, mapProps);
 
-var connectRedux = connect(state => Object.assign({}, {
-    board: state.board
-}));
 
-
-export default connectRedux(dnd(Cell));
+export default dnd(Cell);
